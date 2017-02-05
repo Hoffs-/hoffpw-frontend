@@ -1,3 +1,11 @@
-<h1>
-  {{title}}
-</h1>
+<header>
+  <router-outlet name="top-nav"></router-outlet>
+</header>
+
+<body>
+<router-outlet></router-outlet>
+</body>
+
+<simple-notifications [options]="options" (onCreate)="service.onCreate($event)" (onDestroy)="service.onDestroy($event)"></simple-notifications>
+
+

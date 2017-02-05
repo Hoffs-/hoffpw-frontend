@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+html {
+  background-color: rgba(27, 29, 33, 1);
+  //color: #d7d7d7;
+}
+
+:host {
+  background-color: rgba(27, 29, 33, 1);
+}
+
+.neon {
+  text-shadow: 0 0 0px #fff, 0 0 5px #fff, 0 0 15px #fff, 0 0 25px #FF1177, 0 0 20px #FF1177, 0 0 15px #FF1177, 0 0 10px #FF1177, 0 0 42px #FF1177;
+}
