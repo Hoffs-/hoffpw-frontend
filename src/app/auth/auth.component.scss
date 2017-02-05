@@ -1,0 +1,152 @@
+div {
+  &.container {
+    &.auth {
+      width: 35%;
+      margin-top: 50px;
+    }
+  }
+
+  &.auth-card {
+    background-color: rgba(19, 19, 19, 0.9);
+  }
+
+  &.auth-card-header {
+    background-color: rgba(247, 247, 249, 0.1);
+  }
+}
+
+li {
+  &.nav-item {
+    &:hover {
+      border: transparent;
+    }
+  }
+
+  &.auth-nav {
+    padding-bottom: 3px;
+    position: relative;
+
+    &:after {
+      position: absolute;
+      transition: .4s;
+      content: '';
+      width: 0;
+      left: 50%;
+      bottom: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 30px 1px #FFF;
+    }
+
+    &:before{
+      position: absolute;
+      transition: .2s;
+      content: '';
+      width: 0;
+      left: 50%;
+      bottom: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 80px 1px #FFF;
+    }
+
+    &:hover {
+      border: transparent;
+      cursor: pointer;
+      &:after {
+        width: 100%;
+        left: 0;
+      }
+      &:before {
+        width: 100%;
+        left: 0;
+      }
+    }
+
+    &.active {
+      background: transparent;
+      border: transparent;
+      color: #fff;
+
+      &:after {
+        width: 100%;
+        left: 0;
+      }
+
+      &:before{
+        width: 100%;
+        left: 0;
+      }
+    }
+  }
+}
+
+a {
+  &.nav-link {
+    color: #fff;
+    border: transparent;
+    text-align: center;
+    text-transform: uppercase;
+
+    &:hover {
+      border: transparent;
+      cursor: pointer;
+    }
+
+    &.active {
+      background: transparent;
+      border: transparent;
+      color: #fff;
+    }
+  }
+}
+
+input {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+:host /deep/ {
+
+  h4 {
+    text-transform: uppercase;
+  }
+
+  button {
+    text-transform: uppercase;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  input {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
+    &:focus {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: #000;
+    }
+  }
+
+  label {
+    text-transform: uppercase;
+  }
+
+  div {
+    &.auth-notif {
+      transition: .5s;
+      text-transform: uppercase;
+      padding-top: 5px;
+      font-size: 1.2em;
+    }
+  }
+
+  .ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+}

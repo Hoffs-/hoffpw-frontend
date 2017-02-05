@@ -1,0 +1,20 @@
+{
+  "name": "hoffpw",
+  "description": "Front-end for hoff.pw",
+  "main": "mainfile",
+  "authors": [
+    "Ignas M"
+  ],
+  "dependencies": {
+  },
+  "license": "MIT",
+  "homepage": "https://hoff.pw/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

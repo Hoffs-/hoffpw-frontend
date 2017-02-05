@@ -1,0 +1,14 @@
+<h4 class="card-title">Login</h4>
+<form #f="ngForm" novalidate (ngSubmit)="login(f, f.value, f.valid)">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" name="username" class="form-control" id="username" required [(ngModel)]="loginModel.username" minlength="4" maxlength="32" #username="ngModel">
+    <small class="auth-notif" [hidden]="username.valid || (username.pristine && !f.submitted) || (username.untouched && username.pristine)">Username is required.</small>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" name="password" class="form-control" id="password" required [(ngModel)]="loginModel.password" #password="ngModel">
+    <small class="auth-notif" [hidden]="password.valid || (password.pristine && !f.submitted) || (password.untouched && password.pristine)">Password is required.</small>
+  </div>
+  <button type="submit" class="btn btn-default" [disabled]="!f.form.valid">Submit</button>
+</form>

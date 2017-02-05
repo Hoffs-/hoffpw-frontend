@@ -1,0 +1,14 @@
+<div class="container auth">
+  <div class="card text-center auth-card">
+    <div class="card-header auth-card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/login']">Login</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/signup']">Signup</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/reset']">Reset</a></li>
+      </ul>
+    </div>
+    <div class="card-block">
+      <router-outlet name="auth"></router-outlet>
+    </div>
+  </div>
+</div>
