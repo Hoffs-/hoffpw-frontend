@@ -1,3 +1,9 @@
-<h4 class="card-title">Special title treatment</h4>
-<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-<a href="#" class="btn btn-primary">Go somewhere</a>
+<h4 class="card-title">Reset your password</h4>
+<form #f="ngForm" novalidate (ngSubmit)="reset(f, f.value, f.valid)">
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="text" name="email" class="form-control" id="email" required [(ngModel)]="resetModel.email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" #email="ngModel">
+    <small class="auth-notif" [hidden]="email.valid || (email.pristine && !f.submitted) || (email.untouched && email.pristine)">Email is required and format should be <i>john@doe.com</i>.</small>
+  </div>
+  <button type="submit" class="btn btn-default" [disabled]="!f.form.valid">Submit</button>
+</form>

@@ -1,7 +1,21 @@
+@import "../globals";
+
+$breakpoints: (phone: 320px, tablet: 768px, desktop: 1024px, wide: 1440px);
+
 div {
+  transition: .4s;
   &.container {
     &.auth {
-      width: 35%;
+      @include media('>wide') {
+        width: 30%;
+      }
+      @include media('>=desktop', '<wide') {
+        width: 40%;
+      }
+      @include media('>tablet','<desktop') {
+        width: 50%;
+      }
+      //width: 35%;
       margin-top: 50px;
     }
   }
@@ -106,6 +120,12 @@ input {
 }
 
 :host /deep/ {
+
+  input {
+    transition: .4s;
+    margin: 0 auto;
+    width: 90%;
+  }
 
   h4 {
     text-transform: uppercase;

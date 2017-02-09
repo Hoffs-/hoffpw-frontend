@@ -9,8 +9,9 @@ import {AuthModule} from "./auth/auth.module";
 import {TopnavComponent} from "./topnav/topnav.component";
 import {StatsModule} from "./stats/stats.module";
 import {HomeComponent} from "./home/home.component";
-import {NotificationService} from "./_services/notifications.service";
+import {ToastService} from "./_services/toast.service";
 import {SimpleNotificationsModule} from "angular2-notifications";
+import {UserService} from "./_services/user.service";
 
 @NgModule({
   declarations: [
@@ -24,12 +25,9 @@ import {SimpleNotificationsModule} from "angular2-notifications";
     HttpModule,
     AuthModule,
     StatsModule,
-    SimpleNotificationsModule,
+    SimpleNotificationsModule.forRoot(),
     AppRoutingModule
   ],
-  bootstrap: [AppComponent],
-  providers: [
-    NotificationService
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,31 +1,30 @@
 /**
- * Created by Hoffs on 2017-02-03.
+ * Created by Hoffs-Laptop on 2017-02-08.
  */
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 import {contentHeaders} from './headers';
 
 @Injectable()
-export class AuthenticationService {
+export class UserService {
   public token: string;
   public user: string;
 
   constructor(private http: Http) {
-    console.log('Constructing auth service');
-    // set token if saved in local storage
+    // set token if saved in local
+    console.log("Constructing user service");
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
-    this.user = currentUser && currentUser.username;
+    this.user = currentUser && currentUser.user;
   }
 
-  login(username: string, password: string): Observable<boolean> {
-    return this.http.post('http://localhost:8000/auth/login/',
-      JSON.stringify({ username: username, password: password }), { headers: contentHeaders })
+  getUserData(username: string, password: string): Observable<boolean> {
+    return this.http.post('http://localhost:8000/auth/login/', JSON.stringify({ username: username, password: password }),
+      { headers: contentHeaders })
       .map((response: Response) => {
-        let token = response.json() && response.json().token;
+        const token = response.json() && response.json().token;
         if (token) {
           this.token = token;
           localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));

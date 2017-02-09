@@ -6,4 +6,4 @@
 <router-outlet></router-outlet>
 </body>
 
-<simple-notifications [options]="options" (onCreate)="service.onCreate($event)" (onDestroy)="service.onDestroy($event)"></simple-notifications>
+<simple-notifications [options]="options" (onCreate)="toastService.onCreate($event)" (onDestroy)="toastService.onDestroy($event)"></simple-notifications>

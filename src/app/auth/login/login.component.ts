@@ -4,24 +4,25 @@ import {FormGroup} from "@angular/forms";
 import {Login} from "./model";
 import {AuthenticationService} from "../../_services/authentication.service";
 import Timer = NodeJS.Timer;
-import {NotificationService} from "../../_services/notifications.service";
+import {ToastService} from "../../_services/toast.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [ToastService]
 })
 export class LoginComponent implements OnInit {
   public loginModel: Login;
   private timeout: Timer;
 
-  constructor(public router: Router, private service: NotificationService, private authenticationService: AuthenticationService) { }
+  constructor(public router: Router, private service: ToastService, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.loginModel = {
       username: '',
       password: ''
-    }
+    };
   }
 
   ngOnDestroy() {
