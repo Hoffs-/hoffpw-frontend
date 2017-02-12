@@ -1,18 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {FormGroup} from "@angular/forms";
-import {Login} from "./model";
-import {AuthenticationService} from "../../_services/authentication.service";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {Login} from './model';
+import {AuthenticationService} from '../../_services/authentication.service';
 import Timer = NodeJS.Timer;
-import {ToastService} from "../../_services/toast.service";
+import {ToastService} from '../../_services/toast.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  providers: [ToastService]
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public loginModel: Login;
   private timeout: Timer;
 
@@ -37,7 +36,7 @@ export class LoginComponent implements OnInit {
             if (result === true) {
               this.service.create('success', 'Success!', 'Successfully logged in!');
               form.reset();
-              this.timeout = setTimeout(() => {console.log('routing'); this.router.navigate(['/home']);}, 1500);
+              this.timeout = setTimeout(() => { console.log('routing'); this.router.navigate(['/home']); }, 1500);
             } else {
               this.service.create('error', 'Oops!', 'Invalid details submitted.');
             }

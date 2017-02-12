@@ -1,0 +1,49 @@
+@import "../../globals";
+
+$breakpoints: (phone: 320px, tablet: 768px, desktop: 1024px, wide: 1440px);
+
+h4 {
+  text-transform: uppercase;
+  padding-bottom: 2px;
+  margin-bottom: 35px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+h5 {
+  transition: 1.2s linear;
+  padding-top: 15px;
+  color: transparent;
+  &.success {
+    color: rgb(45, 191, 45);
+  }
+  &.error {
+    color: rgb(191, 54, 58);
+  }
+}
+
+div {
+  transition: .6s;
+  &.container {
+    &.auth {
+      @include media('>wide') {
+        width: 30%;
+      }
+      @include media('>=desktop', '<wide') {
+        width: 40%;
+      }
+      @include media('>tablet','<desktop') {
+        width: 50%;
+      }
+      //width: 35%;
+      margin-top: 50px;
+    }
+  }
+
+  &.auth-card {
+    background-color: rgba(19, 19, 19, 0.9);
+  }
+
+  &.auth-card-header {
+    background-color: rgba(247, 247, 249, 0.1);
+  }
+}

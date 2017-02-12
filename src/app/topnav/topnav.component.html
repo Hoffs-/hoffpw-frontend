@@ -8,13 +8,14 @@
   <nav class="navbar top-nav fixed-top">
     <div class="container">
       <ul class="nav float-left">
-        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/home']">Home</a></li>
-        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/twitch']">Twitch</a></li>
-        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/login']">Login</a></li>
-        <li class="nav-item top-nav" [routerLinkActive]="['active']"><a class="nav-link" [routerLink]="['/signup']">Signup</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="!isLoggedIn"><a class="nav-link" [routerLink]="['/home']">Home</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="!isLoggedIn"><a class="nav-link" [routerLink]="['/twitch']">Twitch</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="isLoggedIn"><a class="nav-link" [routerLink]="['/login']">Login</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="isLoggedIn"><a class="nav-link" [routerLink]="['/signup']">Signup</a></li>
       </ul>
       <ul class="nav float-right">
-        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="!canLogout"><a class="nav-link" (click)="logout()">Logout</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="!isLoggedIn"><a class="nav-link" [routerLink]="['/profile']">Profile</a></li>
+        <li class="nav-item top-nav" [routerLinkActive]="['active']" [hidden]="!isLoggedIn"><a class="nav-link" (click)="logout()">Logout</a></li>
       </ul>
     </div>
   </nav>

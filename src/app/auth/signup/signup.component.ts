@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from "@angular/http";
-import {Router} from "@angular/router";
-import {FormGroup} from "@angular/forms";
-import {contentHeaders} from "../../_services/headers";
-import { Signup } from "./model";
-import {ToastService} from "../../_services/toast.service";
+import {Http} from '@angular/http';
+import {Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {contentHeaders} from '../../_services/headers';
+import { Signup } from './model';
+import {ToastService} from '../../_services/toast.service';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss'],
-  providers: [ToastService]
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
   public signupModel: Signup;
@@ -24,7 +23,7 @@ export class SignupComponent implements OnInit {
       email: '',
       password: '',
       confirmPassword: ''
-    }
+    };
   }
 
   register(form: FormGroup, model: Signup, isValid: boolean) {
