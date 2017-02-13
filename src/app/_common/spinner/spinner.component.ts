@@ -7,13 +7,15 @@ import Timer = NodeJS.Timer;
   styleUrls: ['./spinner.component.scss']
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
-  private currentTimeout: Timer;
+  public success: boolean;
+  public isFinished: boolean;
+  public error: boolean;
+
   private isDelayedRunning: boolean;
-  private success: boolean;
-  private error: boolean;
+  private currentTimeout: Timer;
 
   ngOnInit() {
-    this.isDelayedRunning = this.success = this.error = false;
+    this.isFinished = this.isDelayedRunning = this.success = this.error = false;
   }
 
   @Input()
@@ -21,7 +23,6 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
   @Input()
   public set classType(type: string) {
-    console.log('Got type:' + type);
     if (type === 'success') {
       this.success = true;
     } else if (type === 'error') {
@@ -34,7 +35,6 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
   @Input()
   public set isRunning(value: boolean) {
-    console.log('Changed to: ' + value);
     if (!value) {
       this.cancelTimeout();
       this.isDelayedRunning = false;

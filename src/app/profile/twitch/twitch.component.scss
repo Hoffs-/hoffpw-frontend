@@ -1,0 +1,33 @@
+div {
+}
+
+p {
+  margin-bottom: 0;
+}
+
+button {
+  outline: none;
+  &.btn {
+    padding: .4rem .8rem;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+  }
+  &.btn-outline-disconnect {
+    background-color: transparent;
+    color: rgba(241, 89, 85, 0.78);
+    border-color: rgba(241, 89, 85, 0.78);
+    &:hover {
+      background-color: rgba(216, 83, 83, 0.2);
+      color: rgba(249, 232, 232, 0.78);
+      cursor: pointer;
+    }
+    &:active {
+      outline: none;
+      box-shadow: 0 0 10px 1px rgba(241, 89, 85, 0.38);
+    }
+  }
+  .btn:focus,.btn:active {
+    outline: none !important;
+  }
+}
