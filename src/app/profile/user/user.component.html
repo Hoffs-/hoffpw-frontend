@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header text-center">
+    USER PROFILE
+  </div>
+  <div class="card-block">
+    <dl class="row" [ngClass]="{'loaded': loaded}">
+      <dt class="col-md-4 col-6 text-right">Username</dt>
+      <dd class="col-md-8 col-6 text-left">{{ username || 'Loading' }}</dd>
+
+      <dt class="col-md-4 col-6 text-right">Email</dt>
+      <dd class="col-md-8 col-6 text-left">{{ email || 'Loading' }}</dd>
+
+      <dt class="col-md-4 col-6 text-right">Registered</dt>
+      <dd class="col-md-8 col-6 text-left">{{ date || 'Loading' }}</dd>
+    </dl>
+  </div>
+</div>

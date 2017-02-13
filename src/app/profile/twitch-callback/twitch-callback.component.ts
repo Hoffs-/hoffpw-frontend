@@ -41,7 +41,6 @@ export class TwitchCallbackComponent implements OnInit, OnDestroy {
   private connectUser(code: string) {
     this.twitchService.connectProfile(code).subscribe(
       response => {
-        console.log(response);
         this.message = response;
         this.isRequesting = false;
         this.outputClass = 'success';
@@ -49,7 +48,6 @@ export class TwitchCallbackComponent implements OnInit, OnDestroy {
         this.timer = setTimeout(() => { this.router.navigate(['/home']); }, 3500);
       },
       error => {
-        console.log(error);
         this.message = error;
         this.isRequesting = false;
         this.outputClass = 'error';

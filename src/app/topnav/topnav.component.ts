@@ -27,7 +27,6 @@ export class TopnavComponent implements OnInit, OnDestroy {
     this.loggedInObservable.unsubscribe();
   }
 
-
   public logout() {
     if (this.authenticationService.isLoggedIn) {
       this.service.create('success', 'Success!', 'Successfully logged out!');

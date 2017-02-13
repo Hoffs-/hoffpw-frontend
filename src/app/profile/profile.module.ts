@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './profile-routing.module';
-import {UserComponent} from './profile.component';
+import {ProfileComponent} from './profile.component';
 import {TwitchCallbackComponent} from './twitch-callback/twitch-callback.component';
 import {TwitchComponent} from './twitch/twitch.component';
-import {ProfileComponent} from './user/user.component';
+import {UserComponent} from './user/user.component';
 import {SpinnerComponent} from '../_common/spinner/spinner.component';
+import {UserService} from '../_services/user.service';
 
 @NgModule({
   imports: [
@@ -13,11 +14,14 @@ import {SpinnerComponent} from '../_common/spinner/spinner.component';
     UserRoutingModule
   ],
   declarations: [
-    UserComponent,
+    ProfileComponent,
     TwitchCallbackComponent,
     TwitchComponent,
-    ProfileComponent,
+    UserComponent,
     SpinnerComponent
+  ],
+  providers: [
+    UserService
   ]
 })
 export class UserModule { }

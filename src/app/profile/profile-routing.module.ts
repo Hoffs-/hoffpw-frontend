@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {UserComponent} from './profile.component';
+import {ProfileComponent} from './profile.component';
 import {TwitchCallbackComponent} from './twitch-callback/twitch-callback.component';
 import {AuthGuard} from '../_guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'profile', component: UserComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'twitch/callback', component: TwitchCallbackComponent, canActivate: [AuthGuard] }
 ];
 
