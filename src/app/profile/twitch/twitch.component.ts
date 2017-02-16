@@ -84,7 +84,6 @@ export class TwitchComponent implements OnInit, OnDestroy {
   public disconnect() {
     this.tService.disconnectProfile(this.id).subscribe(
       response => {
-        console.log(response);
         this.loadComponent(500);
       },
       error => {

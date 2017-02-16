@@ -5,11 +5,14 @@ body {
   font-family: 'Quicksand', sans-serif;
   background: #1b1d21;
   color: #d7d7d7;
-  padding-top: 27px;
 }
 
 :host {
   background-color: rgba(27, 29, 33, 1);
+}
+
+img {
+  width: 100%;
 }
 
 div {
