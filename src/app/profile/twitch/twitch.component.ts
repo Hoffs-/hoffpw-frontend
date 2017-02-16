@@ -32,16 +32,21 @@ export class TwitchComponent implements OnInit, OnDestroy {
     const date = new Date().toJSON().slice(0, 10).replace(/-/g, '');
     this.url = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id='
       + clientId + '&redirect_uri=' + redirectURI + '&scope=user_read+channel_subscriptions&state=' + date;
-    this.loaded = false;
-    this.connected = false;
-    this.retrieveData();
+    this.loadComponent(0);
   }
 
   ngOnDestroy() {
     this.ob.unsubscribe();
 }
 
+  private loadComponent(time: number) {
+    this.loaded = false;
+    setTimeout(() => { this.retrieveData(); }, time);
+  }
+
   private retrieveData() {
+    this.username = this.id = this.date = this.partner = null;
+    this.connected = false;
     this.ob = this.tService.getTwitchData().subscribe(
       response => {
         console.log(response['results'][0]);
@@ -79,8 +84,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
   public disconnect() {
     this.tService.disconnectProfile(this.id).subscribe(
       response => {
-        console.log(response);
-        // TODO: Refresh component after disconnecting twitch profile.
+        this.loadComponent(500);
       },
       error => {
         console.log(error);
