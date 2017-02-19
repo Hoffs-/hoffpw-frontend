@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
-import {contentHeaders} from '../../_services/headers';
+import {contentHeaders} from '../../_services/settings';
 import { Signup } from './model';
 import {ToastService} from '../../_services/toast.service';
 

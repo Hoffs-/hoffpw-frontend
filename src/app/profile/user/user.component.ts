@@ -8,8 +8,7 @@ import * as moment from 'moment';
   styleUrls: ['user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-  public username: string;
-  public email: string;
+  public obj: JSON;
   public date: string;
   public loaded: boolean;
   private ob: any;
@@ -29,11 +28,9 @@ export class UserComponent implements OnInit, OnDestroy {
     this.ob = this.service.getUserData().subscribe(
       (response) => {
         console.log(response['results'][0]);
-        const rp = response['results'][0];
-        if (rp) {
-          this.username = rp['username'];
-          this.email = rp['email'];
-          this.date = moment(rp['date_joined']).format('YYYY-MM-DD h:mm:ss a');
+        this.obj = response['results'][0];
+        if (this.obj) {
+          this.date = moment(this.obj['date_joined']).format('YYYY-MM-DD h:mm:ss a');
         }
         this.loaded = true;
       },

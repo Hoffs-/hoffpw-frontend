@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import {AuthenticationService} from './authentication.service';
+import {serverUrl} from './settings';
 
 @Injectable()
 export class TwitchService {
@@ -14,7 +15,7 @@ export class TwitchService {
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
   public connectProfile(code: string): Observable<string> {
-    return this.http.post('http://localhost:8000/twitch/', JSON.stringify({ code: code}),
+    return this.http.post('http://' + serverUrl + ':8000/twitch/', JSON.stringify({ code: code}),
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json()['detail'];
@@ -28,7 +29,7 @@ export class TwitchService {
   }
 
   public getTwitchData(): Observable<Object> {
-    return this.http.get('http://localhost:8000/twitch/',
+    return this.http.get('http://' + serverUrl + ':8000/twitch/',
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
@@ -42,7 +43,7 @@ export class TwitchService {
   }
 
   public disconnectProfile(id: string): Observable<string> {
-    return this.http.delete('http://localhost:8000/twitch/' + id + '/', { headers: this.authenticationService.authHeaders })
+    return this.http.delete('http://' + serverUrl + ':8000/twitch/' + id + '/', { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
       })

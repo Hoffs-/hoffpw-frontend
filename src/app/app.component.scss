@@ -5,6 +5,9 @@ body {
   font-family: 'Quicksand', sans-serif;
   background: #1b1d21;
   color: #d7d7d7;
+  &.app {
+    margin-top: 2em;
+  }
 }
 
 :host {

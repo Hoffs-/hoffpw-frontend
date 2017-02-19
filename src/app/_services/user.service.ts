@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import {AuthenticationService} from './authentication.service';
+import {serverUrl} from './settings';
 
 const TwitchClientID = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
 
@@ -24,7 +25,7 @@ export class UserService {
   }
 
   public getUserData(): Observable<Object> {
-    return this.http.get('http://localhost:8000/users/',
+    return this.http.get('http://' + serverUrl + ':8000/users/',
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();

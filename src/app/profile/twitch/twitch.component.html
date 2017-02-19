@@ -2,15 +2,14 @@
   <div class="card-header text-center">
     <img *ngIf="connected" class="img-fluid image-header-card" src="{{logo}}">
     <p>TWITCH PROFILE</p>
-    <p *ngIf="!connected"><a href="{{url}}">connect</a></p>
   </div>
   <div class="card-block">
     <dl class="row" [ngClass]="{'loaded': loaded}">
       <dt class="col-md-4 col-6 text-right">Username</dt>
-      <dd class="col-md-8 col-6 text-left">{{ username || 'Not connected' }}</dd>
+      <dd class="col-md-8 col-6 text-left">{{ obj?.twitch_display || 'Not connected' }}</dd>
 
       <dt class="col-md-4 col-6 text-right">User ID</dt>
-      <dd class="col-md-8 col-6 text-left">{{ id || 'Not connected' }}</dd>
+      <dd class="col-md-8 col-6 text-left">{{ obj?.twitch_id || 'Not connected' }}</dd>
 
       <dt class="col-md-4 col-6 text-right">Twitch partner</dt>
       <dd class="col-md-8 col-6 text-left">{{ partner || 'Not connected' }}</dd>
@@ -19,5 +18,6 @@
       <dd class="col-md-8 col-6 text-left">{{ date || 'Not connected' }}</dd>
     </dl>
     <p class="text-center" *ngIf="connected"><button type="button" class="btn btn-outline-disconnect" (click)="disconnect()">disconnect</button></p>
+    <p class="text-center" *ngIf="!connected"><a class="btn btn-outline-connect" href="{{url}}">connect</a></p>
   </div>
 </div>
