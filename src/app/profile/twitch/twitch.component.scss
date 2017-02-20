@@ -5,7 +5,7 @@ p {
   margin-bottom: 0;
 }
 
-button {
+button, a {
   outline: none;
   &.btn {
     padding: .4rem .8rem;
@@ -19,7 +19,6 @@ button {
     border-color: rgba(241, 89, 85, 0.78);
     &:hover {
       background-color: rgba(216, 83, 83, 0.2);
-      color: rgba(249, 232, 232, 0.78);
       cursor: pointer;
     }
     &:active {
@@ -30,4 +29,18 @@ button {
   .btn:focus,.btn:active {
     outline: none !important;
   }
+  &.btn-outline-connect {
+    background-color: transparent;
+    color: rgba(79, 241, 65, 0.78);
+    border-color: rgba(79, 241, 65, 0.78);
+    &:hover {
+      background-color: rgba(56, 123, 34, 0.3);
+      cursor: pointer;
+    }
+    &:active {
+      outline: none;
+      box-shadow: 0 0 10px 1px rgba(120, 241, 114, 0.38);
+    }
+  }
 }
+

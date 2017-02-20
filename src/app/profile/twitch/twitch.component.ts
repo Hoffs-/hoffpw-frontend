@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {UserService} from '../../_services/user.service';
 import * as moment from 'moment';
 import {TwitchService} from '../../_services/twitch.service';
-import {Router} from '@angular/router';
 
 const redirectURI = 'http://localhost:4200/twitch/callback';
 const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
@@ -14,14 +13,13 @@ const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
   providers: [TwitchService]
 })
 export class TwitchComponent implements OnInit, OnDestroy {
-  public username: string;
-  public id: string;
   public partner: string;
   public date: string;
   public loaded: boolean;
   public url: string;
   public connected: boolean;
   public logo: string;
+  public obj: JSON;
 
   private ob: any;
   private ob2: any;
@@ -45,21 +43,19 @@ export class TwitchComponent implements OnInit, OnDestroy {
   }
 
   private retrieveData() {
-    this.username = this.id = this.date = this.partner = null;
+    this.date = this.partner = null;
     this.connected = false;
     this.ob = this.tService.getTwitchData().subscribe(
       response => {
         console.log(response['results'][0]);
-        const rp = response['results'][0];
-        if (rp) {
+        this.obj = response['results'][0];
+        if (this.obj) {
           this.connected = true;
-          this.username = rp['twitch_display'];
-          this.id = rp['twitch_id'];
-          this.date = moment(rp['twitch_created']).format('YYYY-MM-DD h:mm:ss a');
-          this.partner = rp['twitch_is_partnered'] ? 'Yes' : 'No';
-          this.getLogo(this.id);
+          this.date = moment(this.obj['twitch_created']).format('YYYY-MM-DD h:mm:ss a');
+          this.partner = this.obj['twitch_is_partnered'] ? 'Yes' : 'No';
+          this.getLogo(this.obj['twitch_id']);
         }
-        if (!rp) { this.loaded = true; }
+        if (!this.obj) { this.loaded = true; }
       },
       error => {
         console.log(error);
@@ -82,7 +78,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
   }
 
   public disconnect() {
-    this.tService.disconnectProfile(this.id).subscribe(
+    this.tService.disconnectProfile(this.obj['twitch_id']).subscribe(
       response => {
         this.loadComponent(500);
       },

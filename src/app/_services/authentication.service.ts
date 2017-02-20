@@ -6,7 +6,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {contentHeaders} from './headers';
+import {contentHeaders, serverUrl} from './settings';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Router} from '@angular/router';
 
@@ -28,7 +28,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post('http://localhost:8000/auth/login/',
+    return this.http.post('http://' + serverUrl + ':8000/auth/login/',
       JSON.stringify({ username: username, password: password }), { headers: contentHeaders })
       .map((response: Response) => {
         const token = response.json() && response.json().token;

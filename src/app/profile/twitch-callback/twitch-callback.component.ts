@@ -45,14 +45,14 @@ export class TwitchCallbackComponent implements OnInit, OnDestroy {
         this.isRequesting = false;
         this.outputClass = 'success';
         this.success = true;
-        this.timer = setTimeout(() => { this.router.navigate(['/home']); }, 3500);
+        this.timer = setTimeout(() => { this.router.navigate(['/profile']); }, 3500);
       },
       error => {
         this.message = error;
         this.isRequesting = false;
         this.outputClass = 'error';
         this.error = true;
-        this.timer = setTimeout(() => { this.router.navigate(['/home']); }, 3500);
+        this.timer = setTimeout(() => { this.router.navigate(['/profile']); }, 3500);
       }
     );
   }
