@@ -1,5 +1,4 @@
 <header>
-  <img src="../assets/wallhaven-170258.jpg">
   <router-outlet name="top-nav"></router-outlet>
 </header>
 
@@ -8,3 +7,18 @@
 </body>
 
 <simple-notifications [options]="options" (onCreate)="toastService.onCreate($event)" (onDestroy)="toastService.onDestroy($event)"></simple-notifications>
+
+<footer>
+  <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBnZeF_ztFZHS0RC3YeeRFonkVkMr3aHro",
+      authDomain: "hoffpw-frontend.firebaseapp.com",
+      databaseURL: "https://hoffpw-frontend.firebaseio.com",
+      storageBucket: "hoffpw-frontend.appspot.com",
+      messagingSenderId: "259319480005"
+    };
+    firebase.initializeApp(config);
+  </script>
+</footer>

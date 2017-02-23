@@ -3,7 +3,7 @@ import {UserService} from '../../_services/user.service';
 import * as moment from 'moment';
 import {TwitchService} from '../../_services/twitch.service';
 
-const redirectURI = 'http://localhost:4200/twitch/callback';
+const redirectURI = 'https://hoff.pw/twitch/callback';
 const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
 
 @Component({
@@ -21,6 +21,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
   public logo: string;
   public obj: JSON;
 
+  private username: string;
   private ob: any;
   private ob2: any;
 
@@ -37,6 +38,25 @@ export class TwitchComponent implements OnInit, OnDestroy {
     this.ob.unsubscribe();
 }
 
+  public disconnect() {
+    this.tService.disconnectProfile(this.obj['twitch_id']).subscribe(
+      response => {
+        this.loadComponent(500);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  public addTracking(username: string) {
+    this.tService.addTracking(this.username, username).subscribe(
+      (data) => {
+        console.log(data);
+      }
+    );
+  }
+
   private loadComponent(time: number) {
     this.loaded = false;
     setTimeout(() => { this.retrieveData(); }, time);
@@ -47,12 +67,12 @@ export class TwitchComponent implements OnInit, OnDestroy {
     this.connected = false;
     this.ob = this.tService.getTwitchData().subscribe(
       response => {
-        console.log(response['results'][0]);
         this.obj = response['results'][0];
         if (this.obj) {
           this.connected = true;
           this.date = moment(this.obj['twitch_created']).format('YYYY-MM-DD h:mm:ss a');
           this.partner = this.obj['twitch_is_partnered'] ? 'Yes' : 'No';
+          this.username = this.obj['twitch_id'];
           this.getLogo(this.obj['twitch_id']);
         }
         if (!this.obj) { this.loaded = true; }
@@ -65,7 +85,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
   };
 
   private getLogo(id: string) {
-    this.ob2 = this.service.getTwitchLogo(id).subscribe(
+    this.ob2 = this.tService.getTwitchLogo(id).subscribe(
       response => {
         this.logo = response;
         this.loaded = true;
@@ -73,17 +93,6 @@ export class TwitchComponent implements OnInit, OnDestroy {
       error => {
         console.log(error);
         this.loaded = true;
-      }
-    );
-  }
-
-  public disconnect() {
-    this.tService.disconnectProfile(this.obj['twitch_id']).subscribe(
-      response => {
-        this.loadComponent(500);
-      },
-      error => {
-        console.log(error);
       }
     );
   }

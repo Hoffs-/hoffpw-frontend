@@ -1,6 +1,6 @@
 <div class="card hidden-card" [ngClass]="{'shown-card': loaded}">
   <div class="card-header text-center">
-    <img *ngIf="connected" class="img-fluid image-header-card" src="{{logo}}">
+    <img *ngIf="connected" class="img-fluid image-header-card" [src]="logo">
     <p>TWITCH PROFILE</p>
   </div>
   <div class="card-block">
@@ -19,5 +19,6 @@
     </dl>
     <p class="text-center" *ngIf="connected"><button type="button" class="btn btn-outline-disconnect" (click)="disconnect()">disconnect</button></p>
     <p class="text-center" *ngIf="!connected"><a class="btn btn-outline-connect" href="{{url}}">connect</a></p>
+    <p class="text-center"><a class="btn btn-outline-connect" (click)="addTracking('ricknotastley')" >connect</a></p>
   </div>
 </div>
