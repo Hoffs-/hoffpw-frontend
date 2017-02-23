@@ -7,4 +7,4 @@ export const contentHeaders = new Headers();
 contentHeaders.append('Accept', 'application/json');
 contentHeaders.append('Content-Type', 'application/json');
 
-export const serverUrl = '192.168.1.84';
+export const serverUrl = 'https://api.hoff.pw';

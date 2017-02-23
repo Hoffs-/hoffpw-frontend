@@ -27,8 +27,21 @@ export class AuthenticationService {
     this.updateHeader(this.token);
   }
 
+  register(username: string, password: string, email: string): Observable<boolean> {
+    return this.http.post(serverUrl + '/users/',
+      JSON.stringify({ username: username, password: password, email: email }), { headers: contentHeaders })
+      .map((response: Response) => {
+        if (response.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+  }
+
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post('http://' + serverUrl + ':8000/auth/login/',
+    return this.http.post(serverUrl + '/auth/login/',
       JSON.stringify({ username: username, password: password }), { headers: contentHeaders })
       .map((response: Response) => {
         const token = response.json() && response.json().token;

@@ -26,15 +26,14 @@ export class UserComponent implements OnInit, OnDestroy {
 
   retrieveData() {
     this.ob = this.service.getUserData().subscribe(
-      (response) => {
-        console.log(response['results'][0]);
+      response => {
         this.obj = response['results'][0];
         if (this.obj) {
           this.date = moment(this.obj['date_joined']).format('YYYY-MM-DD h:mm:ss a');
         }
         this.loaded = true;
       },
-      (error) => {
+      error => {
         console.log(error);
         this.loaded = true;
       }

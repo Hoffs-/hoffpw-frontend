@@ -4,6 +4,13 @@ html {
   //color: #d7d7d7;
 }
 
+body, p.pre-load {
+  background-color: rgba(27, 29, 33, 1);
+  color: #fff;
+  font-size: 2em;
+  text-align: center;
+}
+
 :host {
   background-color: rgba(27, 29, 33, 1);
 }
