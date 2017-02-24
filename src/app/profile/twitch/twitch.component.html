@@ -19,6 +19,24 @@
     </dl>
     <p class="text-center" *ngIf="connected"><button type="button" class="btn btn-outline-disconnect" (click)="disconnect()">disconnect</button></p>
     <p class="text-center" *ngIf="!connected"><a class="btn btn-outline-connect" href="{{url}}">connect</a></p>
-    <p class="text-center"><a class="btn btn-outline-connect" (click)="addTracking('ricknotastley')" >connect</a></p>
+    <p class="text-center"><a class="btn btn-outline-connect" (click)="testTracking()" >connect</a></p>
+  </div>
+</div>
+
+<div *ngIf="connected" class="card hidden-card" [ngClass]="{'shown-card': loaded}">
+  <div class="card-header text-center">
+    <p>TRACKING</p>
+  </div>
+  <div class="card-block">
+    <form #f="ngForm" novalidate (ngSubmit)="addTracking(f.value)">
+      <div class="form-group flex-box">
+        <input class="tracking-input" type="text" name="user" id="userInput" placeholder="Twitch Username" required [(ngModel)]="trackModel.username" #username="ngModel">
+        <button type="submit" class="btn btn-outline-track" [disabled]="!f.form.valid">Track</button>
+      </div>
+      <p><small class="auth-notif" [ngClass]="{'shown': !(username.valid || (username.pristine && !f.submitted) || (username.untouched && username.pristine))}">Username is required.</small></p>
+    </form>
+    <ul class="track-list">
+      <li class="track-list" *ngFor="let item of trackingDisplay; let i = index">{{i+1}}{{item}}</li>
+    </ul>
   </div>
 </div>
