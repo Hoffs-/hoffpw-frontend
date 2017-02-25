@@ -1,8 +1,9 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {UserService} from '../../_services/user.service';
+import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {TwitchService} from '../../_services/twitch.service';
 import {TrackUser} from './model';
+import {ListAnimation} from '../../_common/animations';
+import {ToastService} from '../../_services/toast.service';
 
 const redirectURI = 'https://hoff.pw/twitch/callback';
 const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
@@ -11,9 +12,10 @@ const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
   selector: 'app-twitch',
   templateUrl: './twitch.component.html',
   styleUrls: ['./twitch.component.scss'],
+  animations: [ ListAnimation(700) ],
   providers: [TwitchService]
 })
-export class TwitchComponent implements OnInit, OnDestroy {
+export class TwitchComponent implements OnInit {
   public trackModel: TrackUser;
   public partner: string;
   public date: string;
@@ -22,15 +24,22 @@ export class TwitchComponent implements OnInit, OnDestroy {
   public connected: boolean;
   public logo: string;
   public obj: JSON;
-  public trackingDisplay: Array<string>;
+  public trackingDisplay: Array<[string, string]>;
 
   private username: string;
-  private ob: any;
-  private ob2: any;
 
-  constructor(private service: UserService, private tService: TwitchService) {
+  private static _arrayHasTuple(array: Array<[string, string]>, id: string): boolean {
+    for (const obj of array) {
+      if (obj[0] === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  constructor(private toastService: ToastService, private twitchService: TwitchService) {
     this.trackModel = {
-      username: ''
+      username: '',
     };
     this.trackingDisplay = [];
   };
@@ -42,13 +51,10 @@ export class TwitchComponent implements OnInit, OnDestroy {
     this._loadComponent(0);
   }
 
-  ngOnDestroy() {
-    this.ob.unsubscribe();
-}
-
   public disconnect() {
-    this.tService.disconnectProfile(this.obj['twitch_id']).subscribe(
+    this.twitchService.disconnectProfile(this.obj['twitch_id']).subscribe(
       response => {
+        this.toastService.create('success', 'Disconnected', 'Successfully disconnected your twitch account.');
         this._loadComponent(500);
       },
       error => {
@@ -57,43 +63,40 @@ export class TwitchComponent implements OnInit, OnDestroy {
     );
   }
 
+  public stopTracking(id: number) {
+    this.twitchService.removeFromTracking(this.username, this.trackingDisplay[id][0]).subscribe(
+      response => {
+        this.trackingDisplay.splice(id, 1);
+        this.toastService.create('success', 'Success!', 'Successfully removed from your tracking list.');
+      },
+      error => {
+        this.toastService.create('error', 'Oops!', 'Something went wrong while trying to remove user from your tracking list.');
+        console.log(error);
+        this._loadTracking(true);
+      }
+    );
+  }
+
   public addTracking(username: string) {
-    this.tService.addTracking(this.username, username['user']).subscribe(
-      data => this._loadTracking(),
-      error => console.log(error)
+    this.twitchService.addTracking(this.username, username['user']).subscribe(
+      data => {
+        this.toastService.create('success', 'Success!', 'Successfully added '
+          + username['user'] + ' to your tracking list.');
+        this._loadTracking(false);
+      },
+      error => {
+        this.toastService.create('error', 'Oops!', 'Something went wrong while trying to add '
+          + username['user'] + ' to your tracking list.');
+        console.log(error);
+      }
     );
   }
 
-  public testTracking() {
-    this.tService.getTrackingUsers(this.username).subscribe(
-      data => this._test(data),
+  private _loadTracking(force: boolean) {
+    this.twitchService.getTrackingUsers(this.username).subscribe(
+      data => this._makeDisplayArray(data, force),
       error => console.log(error)
     );
-  }
-
-  private _test(data: Array<string>) {
-    console.log(data);
-  }
-
-  private _loadTracking() {
-    this.tService.getTrackingUsers(this.username).subscribe(
-      data => this._makeDisplayArray(data),
-      error => console.log(error)
-    );
-  }
-
-  private _makeDisplayArray(data: Array<string>): Array<string> {
-    const displayList = [];
-    for (const user of data) {
-      this.tService.getTwitchUserData(user).subscribe(
-        response => {
-          if (this.trackingDisplay.indexOf(response['display_name']) === -1) {
-            this.trackingDisplay.push(response['display_name']);
-          }
-        }
-      );
-    }
-    return displayList;
   }
 
   private _loadComponent(time: number) {
@@ -101,10 +104,26 @@ export class TwitchComponent implements OnInit, OnDestroy {
     setTimeout(() => { this._retrieveData(); }, time);
   }
 
+  private _makeDisplayArray(data: Array<string>, force: boolean): void {
+    if (force) {
+      this.trackingDisplay = [];
+    }
+    console.log(data.length);
+    for (const user of data) {
+      this.twitchService.getTwitchUserData(user).subscribe(
+        response => {
+          if (!TwitchComponent._arrayHasTuple(this.trackingDisplay, user)) {
+            this.trackingDisplay.push([user, response['display_name']]);
+          }
+        }
+      );
+    }
+  }
+
   private _retrieveData() {
     this.date = this.partner = null;
     this.connected = false;
-    this.ob = this.tService.getTwitchData().subscribe(
+    this.twitchService.getTwitchData().subscribe(
       response => {
         this.obj = response['results'][0];
         if (this.obj) {
@@ -113,7 +132,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
           this.partner = this.obj['twitch_is_partnered'] ? 'Yes' : 'No';
           this.username = this.obj['twitch_id'];
           this._getLogo(this.obj['twitch_id']);
-          this._loadTracking();
+          this._loadTracking(false);
         }
         if (!this.obj) { this.loaded = true; }
       },
@@ -125,7 +144,7 @@ export class TwitchComponent implements OnInit, OnDestroy {
   };
 
   private _getLogo(id: string) {
-    this.ob2 = this.tService.getTwitchUserData(id).subscribe(
+    this.twitchService.getTwitchUserData(id).subscribe(
       response => {
         this.logo = response['logo'];
         this.loaded = true;

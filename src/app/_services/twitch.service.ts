@@ -17,6 +17,23 @@ export class TwitchService {
 
   private twitchHeaders: Headers;
 
+  private static _addToArray(list: Array<string>, data: JSON): Array<string> {
+    for (let _i = 0; _i < data['length']; _i++) {
+      list.push(data[_i]['twitch_id']);
+    }
+    return list;
+  }
+
+  private static _successfulRequest(data: any, observer: Observer<any>) {
+    observer.next(data);
+    observer.complete();
+  }
+
+  private static _errorRequest(data: any, observer: Observer<any>) {
+    observer.error(data);
+    observer.complete();
+  }
+
   constructor(private http: Http, private authenticationService: AuthenticationService) {
     this.twitchHeaders = new Headers();
     this.twitchHeaders.append('Accept', 'application/vnd.twitchtv.v5+json');
@@ -75,31 +92,35 @@ export class TwitchService {
   }
 
   public getTrackingUsers(id: string): Observable<Array<string>> {
-    const list = [];
     return Observable.create(
-      observer => this._getAllTrackingUserApi(id, list, observer, 1)
+      observer => this._getAllTrackingUserApi(id, observer, 1)
     );
   }
 
-  private _getAllTrackingUserApi(id: string, list: Array<string>,  observer: Observer<Array<string>>, page: number) {
+  public addTracking(twitch_user: string, username: string): Observable<string> {
+    return Observable.create(
+      observer => {
+        this._getUserIdTwitch(username).subscribe(
+          response => this._sendRequest(twitch_user, response, observer),
+          error => TwitchService._errorRequest(error, observer)
+        );
+      }
+    );
+  }
+
+  private _getAllTrackingUserApi(id: string, observer: Observer<Array<string>>, page: number) {
+    const list = [];
     this._getTrackingUsersApi(id, page).subscribe(
       response => {
-        observer.next(this._addToArray(list, response['results']));
+        observer.next(TwitchService._addToArray(list, response['results']));
         if (response['next'] != null) {
-          this._getAllTrackingUserApi(id, list, observer, ++page);
+          this._getAllTrackingUserApi(id, observer, ++page);
         } else {
           observer.complete();
         }
       },
-      error => this._errorRequest(error, observer)
+      error => TwitchService._errorRequest(error, observer)
     );
-  }
-
-  private _addToArray(list: Array<string>, data: JSON): Array<string> {
-    for (let _i = 0; _i < data['length']; _i++) {
-      list.push(data[_i]['twitch_id']);
-    }
-    return list;
   }
 
   private _getTrackingUsersApi(id: string, page: number): Observable<JSON> {
@@ -112,32 +133,11 @@ export class TwitchService {
       });
   }
 
-  public addTracking(twitch_user: string, username: string): Observable<string> {
-    return Observable.create(
-      observer => {
-        this._getUserIdTwitch(username).subscribe(
-          response => this._sendRequest(twitch_user, response, observer),
-          error => this._errorRequest(error, observer)
-        );
-      }
-    );
-  }
-
   private _sendRequest(user: string, id: string, observer: Observer<string>) {
     this._sendTrackingRequestToApi(user, id).subscribe(
-      response => this._successfulRequest(response, observer),
-      error => this._errorRequest(error, observer)
+      response => TwitchService._successfulRequest(response, observer),
+      error => TwitchService._errorRequest(error, observer)
     );
-  }
-
-  private _successfulRequest(data: any, observer: Observer<any>) {
-    observer.next(data);
-    observer.complete();
-  }
-
-  private _errorRequest(data: any, observer: Observer<any>) {
-    observer.error(data);
-    observer.complete();
   }
 
   private _sendTrackingRequestToApi(user_id: string, id: string): Observable<boolean> {
@@ -160,4 +160,20 @@ export class TwitchService {
         return Observable.throw(error || 'Server error');
     });
   }
+
+  public removeFromTracking(user: string, id: string): Observable<boolean> {
+    return this.http.delete(serverUrl + '/twitch/' + user + '/tracking/' + id + '/', { headers: this.authenticationService.authHeaders })
+      .map((response: Response) => {
+        if (response.status === 200) {
+          console.log(response.status);
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error: any) => {
+        return Observable.throw(error || 'Server error');
+    });
+  }
 }
+

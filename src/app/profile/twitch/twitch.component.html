@@ -19,7 +19,6 @@
     </dl>
     <p class="text-center" *ngIf="connected"><button type="button" class="btn btn-outline-disconnect" (click)="disconnect()">disconnect</button></p>
     <p class="text-center" *ngIf="!connected"><a class="btn btn-outline-connect" href="{{url}}">connect</a></p>
-    <p class="text-center"><a class="btn btn-outline-connect" (click)="testTracking()" >connect</a></p>
   </div>
 </div>
 
@@ -35,8 +34,10 @@
       </div>
       <p><small class="auth-notif" [ngClass]="{'shown': !(username.valid || (username.pristine && !f.submitted) || (username.untouched && username.pristine))}">Username is required.</small></p>
     </form>
+  </div>
+  <div class="card-block list-block">
     <ul class="track-list">
-      <li class="track-list" *ngFor="let item of trackingDisplay; let i = index">{{i+1}}{{item}}</li>
+      <li class="track-list" [@listAddRemove]="'in'" *ngFor="let item of trackingDisplay; let i = index"><p class="track-item"><i class="fa fa-twitch" aria-hidden="true"></i> {{item[1]}}</p><i class="fa fa-trash-o  i-right i-right-side" aria-hidden="true" (click)="stopTracking(i)"></i><i class="fa fa-eye i-right" aria-hidden="true"></i></li>
     </ul>
   </div>
 </div>
