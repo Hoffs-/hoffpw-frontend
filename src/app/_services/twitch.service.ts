@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import {AuthenticationService} from './authentication.service';
 import {serverUrl} from './settings';
+import {Observer} from 'rxjs/Observer';
 
 const TwitchClientID = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
 
@@ -16,9 +17,26 @@ export class TwitchService {
 
   private twitchHeaders: Headers;
 
+  private static _addToArray(list: Array<string>, data: JSON): Array<string> {
+    for (let _i = 0; _i < data['length']; _i++) {
+      list.push(data[_i]['twitch_id']);
+    }
+    return list;
+  }
+
+  private static _successfulRequest(data: any, observer: Observer<any>) {
+    observer.next(data);
+    observer.complete();
+  }
+
+  private static _errorRequest(data: any, observer: Observer<any>) {
+    observer.error(data);
+    observer.complete();
+  }
+
   constructor(private http: Http, private authenticationService: AuthenticationService) {
     this.twitchHeaders = new Headers();
-      this.twitchHeaders.append('Accept', 'application/vnd.twitchtv.v5+json');
+    this.twitchHeaders.append('Accept', 'application/vnd.twitchtv.v5+json');
     this.twitchHeaders.append('Client-ID', TwitchClientID);
   }
 
@@ -63,18 +81,8 @@ export class TwitchService {
       });
   }
 
-  public getTwitchLogo(id: string): Observable<string> {
+  public getTwitchUserData(id: string): Observable<JSON> {
     return this.http.get('https://api.twitch.tv/kraken/users/' + id, { headers: this.twitchHeaders})
-      .map((response: Response) => {
-        return response.json()['logo'];
-      })
-      .catch((error: any) => {
-        return Observable.throw(error.json() || 'Server error');
-      });
-  }
-
-  public getTrackingUsers(id: string): Observable<Object> {
-    return this.http.get(serverUrl + '/twitch/' + id + '/tracking/', { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
       })
@@ -83,49 +91,56 @@ export class TwitchService {
       });
   }
 
+  public getTrackingUsers(id: string): Observable<Array<string>> {
+    return Observable.create(
+      observer => this._getAllTrackingUserApi(id, observer, 1)
+    );
+  }
+
   public addTracking(twitch_user: string, username: string): Observable<string> {
     return Observable.create(
       observer => {
-        this.getUserId(username).subscribe(
-          response => {
-            this.sendRequest(twitch_user, response).subscribe(
-              reqResponse => {
-                observer.next(reqResponse);
-                observer.complete();
-              },
-              reqError => {
-                observer.next('error in sendRequest');
-                observer.complete();
-              }
-            );
-          },
-          error => {
-            observer.next('error in getUserId');
-            observer.complete();
-          }
+        this._getUserIdTwitch(username).subscribe(
+          response => this._sendRequest(twitch_user, response, observer),
+          error => TwitchService._errorRequest(error, observer)
         );
       }
     );
   }
 
-  private sendRequest(user: string, id: string): Observable<string> {
-    return Observable.create(
-      observer => {
-        this.sendTrackingRequest(user, id).subscribe(
-          response => {
-            observer.next('complete in sendRequest');
-            observer.complete();
-          },
-          error => {
-            observer.next('error in sendRequest fnc');
-            observer.complete();
-          }
-        );
-      }
+  private _getAllTrackingUserApi(id: string, observer: Observer<Array<string>>, page: number) {
+    const list = [];
+    this._getTrackingUsersApi(id, page).subscribe(
+      response => {
+        observer.next(TwitchService._addToArray(list, response['results']));
+        if (response['next'] != null) {
+          this._getAllTrackingUserApi(id, observer, ++page);
+        } else {
+          observer.complete();
+        }
+      },
+      error => TwitchService._errorRequest(error, observer)
     );
   }
 
-  private sendTrackingRequest(user_id: string, id: string): Observable<boolean> {
+  private _getTrackingUsersApi(id: string, page: number): Observable<JSON> {
+    return this.http.get(serverUrl + '/twitch/' + id + '/tracking/?page=' + page, { headers: this.authenticationService.authHeaders })
+      .map((response: Response) => {
+        return response.json();
+      })
+      .catch((error: any) => {
+        return Observable.throw(error || 'Server error');
+      });
+  }
+
+  private _sendRequest(user: string, id: string, observer: Observer<string>) {
+    this._sendTrackingRequestToApi(user, id).subscribe(
+      response => TwitchService._successfulRequest(response, observer),
+      error => TwitchService._errorRequest(error, observer)
+    );
+  }
+
+  private _sendTrackingRequestToApi(user_id: string, id: string): Observable<boolean> {
     return this.http.post(serverUrl + '/twitch/' + user_id + '/tracking/', JSON.stringify({ twitch_id: id }),
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
@@ -136,8 +151,7 @@ export class TwitchService {
       });
   }
 
-  private getUserId(user: string): Observable<string> {
-    console.log('getuid');
+  private _getUserIdTwitch(user: string): Observable<string> {
     return this.http.get('https://api.twitch.tv/kraken/users?login=' + user, { headers: this.twitchHeaders })
       .map((response: Response) => {
         return response.json()['users'][0]['_id'];
@@ -146,4 +160,20 @@ export class TwitchService {
         return Observable.throw(error || 'Server error');
     });
   }
+
+  public removeFromTracking(user: string, id: string): Observable<boolean> {
+    return this.http.delete(serverUrl + '/twitch/' + user + '/tracking/' + id + '/', { headers: this.authenticationService.authHeaders })
+      .map((response: Response) => {
+        if (response.status === 200) {
+          console.log(response.status);
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error: any) => {
+        return Observable.throw(error || 'Server error');
+    });
+  }
 }
+

@@ -7,10 +7,12 @@ import {TwitchComponent} from './twitch/twitch.component';
 import {UserComponent} from './user/user.component';
 import {SpinnerComponent} from '../_common/spinner/spinner.component';
 import {UserService} from '../_services/user.service';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     UserRoutingModule
   ],
   declarations: [
