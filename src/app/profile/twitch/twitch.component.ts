@@ -108,7 +108,6 @@ export class TwitchComponent implements OnInit {
     if (force) {
       this.trackingDisplay = [];
     }
-    console.log(data.length);
     for (const user of data) {
       this.twitchService.getTwitchUserData(user).subscribe(
         response => {
