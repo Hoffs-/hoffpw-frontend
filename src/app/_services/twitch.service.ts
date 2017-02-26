@@ -41,7 +41,7 @@ export class TwitchService {
   }
 
   public connectProfile(code: string): Observable<string> {
-    return this.http.post(serverUrl + '/twitch/', JSON.stringify({ code: code}),
+    return this.http.post(serverUrl + '/twitch/profiles/', JSON.stringify({ code: code}),
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json()['detail'];
@@ -55,7 +55,7 @@ export class TwitchService {
   }
 
   public getTwitchData(): Observable<Object> {
-    return this.http.get(serverUrl + '/twitch/',
+    return this.http.get(serverUrl + '/twitch/profiles/',
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
@@ -69,7 +69,7 @@ export class TwitchService {
   }
 
   public disconnectProfile(id: string): Observable<string> {
-    return this.http.delete(serverUrl + '/twitch/' + id + '/', { headers: this.authenticationService.authHeaders })
+    return this.http.delete(serverUrl + '/twitch/profiles/' + id + '/', { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
       })
@@ -91,12 +91,6 @@ export class TwitchService {
       });
   }
 
-  public getTrackingUsers(id: string): Observable<Array<string>> {
-    return Observable.create(
-      observer => this._getAllTrackingUserApi(id, observer, 1)
-    );
-  }
-
   public addTracking(twitch_user: string, username: string): Observable<string> {
     return Observable.create(
       observer => {
@@ -105,6 +99,12 @@ export class TwitchService {
           error => TwitchService._errorRequest(error, observer)
         );
       }
+    );
+  }
+
+  public getTrackingUsers(id: string): Observable<Array<string>> {
+    return Observable.create(
+      observer => this._getAllTrackingUserApi(id, observer, 1)
     );
   }
 
@@ -124,7 +124,8 @@ export class TwitchService {
   }
 
   private _getTrackingUsersApi(id: string, page: number): Observable<JSON> {
-    return this.http.get(serverUrl + '/twitch/' + id + '/tracking/?page=' + page, { headers: this.authenticationService.authHeaders })
+    return this.http.get(serverUrl + '/twitch/profiles/' + id + '/tracking/?page=' + page,
+      { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return response.json();
       })
@@ -141,7 +142,7 @@ export class TwitchService {
   }
 
   private _sendTrackingRequestToApi(user_id: string, id: string): Observable<boolean> {
-    return this.http.post(serverUrl + '/twitch/' + user_id + '/tracking/', JSON.stringify({ twitch_id: id }),
+    return this.http.post(serverUrl + '/twitch/profiles/' + user_id + '/tracking/', JSON.stringify({ twitch_id: id }),
       { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         return true;
@@ -162,7 +163,8 @@ export class TwitchService {
   }
 
   public removeFromTracking(user: string, id: string): Observable<boolean> {
-    return this.http.delete(serverUrl + '/twitch/' + user + '/tracking/' + id + '/', { headers: this.authenticationService.authHeaders })
+    return this.http.delete(serverUrl + '/twitch/profiles/' + user + '/tracking/' + id + '/',
+      { headers: this.authenticationService.authHeaders })
       .map((response: Response) => {
         if (response.status === 200) {
           console.log(response.status);
