@@ -7,7 +7,7 @@ import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
 import {TwitchStatsService} from '../_services/twitchstats.service';
 
 export function highchartsFactory() {
-  return require('highcharts');
+  return require('highcharts/highstock');
 }
 
 @NgModule({

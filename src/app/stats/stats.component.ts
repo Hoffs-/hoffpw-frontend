@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TwitchStatsService} from '../_services/twitchstats.service';
+import {ActivatedRoute, Params} from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-stats',
@@ -8,27 +10,36 @@ import {TwitchStatsService} from '../_services/twitchstats.service';
 })
 export class StatsComponent implements OnInit {
 
-  constructor(tStatsService: TwitchStatsService) {
-    this.tt = 0;
+  constructor(tStatsService: TwitchStatsService, private route: ActivatedRoute) {
+    let user = '';
+    this.route.params.subscribe(
+      (params: Params) => { user = params['id']; }
+    );
     this.options = {
-      title : { text : 'test' },
+      xAxis: {
+        type: 'datetime',
+      },
       series: [{
         name: 'Current Viewers',
         data: [],
-        allowPointSelect: true
-      },
+        tooltip: {
+          pointFormatter: function() {
+            return 'Current viewers: <b>' + this.y + '</b><br>' +
+              'Status: <b>' + this.status_data + '</b><br>' +
+              'Game: <b>' + this.game_data + '</b><br>';
+          }
+        },
+      } /* ,
         {
         name: 'Total Views',
-        data: [],
-        allowPointSelect: true
+        data: []
       },
         {
         name: 'Total Followers',
-        data: [],
-        allowPointSelect: true
-      }],
+        data: []
+      } */ ],
     };
-    tStatsService.getAllStats('27815262').subscribe(
+    tStatsService.getAllStats(user.toString()).subscribe(
       response => {
         this._parseResponse(response);
       },
@@ -43,7 +54,6 @@ export class StatsComponent implements OnInit {
 
   options: Object;
   chart: any;
-  tt: number;
 
   saveChart(chart) {
     this.chart = chart;
@@ -51,21 +61,25 @@ export class StatsComponent implements OnInit {
 
   private _parseResponse(data: Array<Object>) {
     for (const obj of data) {
-      console.log(obj);
       this.chart.series[0].addPoint({
-        x: this.tt,
-        y: obj['current_viewers']
-      });
+        x: moment(obj['created']).toDate(),
+        y: obj['current_viewers'],
+        status_data: obj['channel_status'],
+        game_data: obj['game']
+      }, false);
+      /*
       this.chart.series[1].addPoint({
-        x: this.tt,
+        x: moment(obj['created']).toDate(),
         y: obj['total_views']
-      });
+      }, false);
       this.chart.series[2].addPoint({
-        x: this.tt,
+        x: moment(obj['created']).toDate(),
         y: obj['total_followers']
-      });
-      this.tt += 2;
+      }, false); */
     }
+    this.chart.redraw();
+    // this.chart.series[1].hide();
+    // this.chart.series[2].hide();
   }
 
   onShowEvent(series) {

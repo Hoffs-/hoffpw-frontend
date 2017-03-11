@@ -4,6 +4,7 @@ import {TwitchService} from '../../_services/twitch.service';
 import {TrackUser} from './model';
 import {ListAnimation} from '../../_common/animations';
 import {ToastService} from '../../_services/toast.service';
+import {Router} from "@angular/router";
 
 const redirectURI = 'https://hoff.pw/twitch/callback';
 const clientId = 'wzfatxi0lrgmnpvibgdqnokgtgkicv';
@@ -37,7 +38,7 @@ export class TwitchComponent implements OnInit {
     return false;
   }
 
-  constructor(private toastService: ToastService, private twitchService: TwitchService) {
+  constructor(private toastService: ToastService, private twitchService: TwitchService, private router: Router) {
     this.trackModel = {
       username: '',
     };
@@ -90,6 +91,10 @@ export class TwitchComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  public goToStatsPage(id: number) {
+    this.router.navigate(['/twitch/stats/', this.trackingDisplay[id][0].toString()]);
   }
 
   private _loadTracking(force: boolean) {

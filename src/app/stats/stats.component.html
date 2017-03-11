@@ -2,8 +2,5 @@
   stats works!
 </p>
 
-<chart [options]="options" (load)="saveChart($event.context)">
-  <series (hide)="onSeriesHide($event.context)" (mouseOver)="onSeriesMouseOver($event)" (show)="onShowEvent($event)">
-    <point (select)="onPointSelect($event.context)"></point>
-  </series>
+<chart type="StockChart" [options]="options" (load)="saveChart($event.context)">
 </chart>

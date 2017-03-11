@@ -37,7 +37,7 @@
   </div>
   <div class="card-block list-block">
     <ul class="track-list">
-      <li class="track-list" [@listAddRemove]="'in'" *ngFor="let item of trackingDisplay; let i = index"><p class="track-item"><i class="fa fa-twitch" aria-hidden="true"></i> {{item[1]}}</p><i class="fa fa-trash-o  i-right i-right-side" aria-hidden="true" (click)="stopTracking(i)"></i><i class="fa fa-eye i-right" aria-hidden="true"></i></li>
+      <li class="track-list" [@listAddRemove]="'in'" *ngFor="let item of trackingDisplay; let i = index"><p class="track-item"><i class="fa fa-twitch" aria-hidden="true"></i> {{item[1]}}</p><i class="fa fa-trash-o  i-right i-right-side" aria-hidden="true" (click)="stopTracking(i)"></i><i class="fa fa-eye i-right" aria-hidden="true" (click)="goToStatsPage(i)"></i></li>
     </ul>
   </div>
 </div>
