@@ -5,9 +5,18 @@ import {StatsComponent} from './stats.component';
 import {ChartModule} from 'angular2-highcharts';
 import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
 import {TwitchStatsService} from '../_services/twitchstats.service';
+import {dark_unica} from '../_common/highcharts_exports';
+import { StockChartsComponent } from './stock-charts/stock-charts.component';
 
 export function highchartsFactory() {
-  return require('highcharts/highstock');
+  const Highcharts = require('highcharts/highstock');
+  Highcharts.setOptions({
+    global: {
+      useUTC: false
+    }
+  });
+  Highcharts.setOptions(dark_unica);
+  return Highcharts;
 }
 
 @NgModule({
@@ -24,7 +33,8 @@ export function highchartsFactory() {
     TwitchStatsService
   ],
   declarations: [
-    StatsComponent
+    StatsComponent,
+    StockChartsComponent
   ]
 })
 export class StatsModule { }

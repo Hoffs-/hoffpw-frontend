@@ -1,3 +1,50 @@
-chart {
+app-stock-charts {
   width: 100%;
+}
+
+div {
+  &.container {
+    padding-top: 15px;
+  }
+}
+
+:host /deep/ {
+  div {
+    transition: 0.4s;
+    &.card, &.card-footer {
+      background-color: rgba(255, 70, 0, 0.15);
+      margin-bottom: 20px;
+    }
+    &.card-header {
+      background: rgba(255, 70, 0, 0.08);
+    }
+    &.hidden-card {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s linear;
+    }
+    &.shown-card {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  img {
+    &.image-header-card {
+      width: 20%;
+      border-radius: 100%;
+    }
+  }
+  button {
+    outline: none;
+  }
+  dt {
+    text-transform: uppercase;
+  }
+  dl {
+    color: transparent;
+    transition: .5s linear;
+    &.loaded {
+      color: #d7d7d7;
+    }
+  }
 }

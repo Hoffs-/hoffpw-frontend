@@ -1,0 +1,40 @@
+
+
+<div class="row justify-content-md-center">
+
+  <div class="col-lg-12 col-md-6">
+    <div class="card">
+      <div class="card-header text-center">
+        <p>VIEWERSHIP STATISTICS</p>
+      </div>
+      <div class="card-block">
+        <chart type="StockChart" [options]="optionsViewers" (load)="saveChartViewers($event.context)">
+        </chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <p>FOLLOWERS STATISTICS</p>
+      </div>
+      <div class="card-block">
+        <chart type="StockChart" [options]="optionsFollowers" (load)="saveChartFollowers($event.context)">
+        </chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <p>VIEWS STATISTICS</p>
+      </div>
+      <div class="card-block">
+        <chart type="StockChart" [options]="optionsTotalViews" (load)="saveChartTotalViews($event.context)">
+        </chart>
+      </div>
+    </div>
+  </div>
+</div>

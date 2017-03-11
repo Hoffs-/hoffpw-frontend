@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {StatsComponent} from './stats.component';
-import {AuthGuard} from '../_guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'twitch/stats/:id', component: StatsComponent, canActivate: [AuthGuard] }
+  { path: 'twitch/stats/:id', component: StatsComponent, canActivate: [] }
 ];
 
 @NgModule({
